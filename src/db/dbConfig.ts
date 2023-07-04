@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 
 export function connect(){
+
     try{
 
-        mongoose.connect(process.env.DATABASE!);
+       
+        mongoose.connect(process.env.DB_URI!);
         const connection = mongoose.connection;
 
         connection.on('connected', ()=>{
-            console.log(`Mongoose connected to ${process.env.DATABASE}`);
+            console.log(`Mongoose connected`);
+            // console.log()
         })
 
         connection.on('error', (error)=>{
@@ -16,9 +19,8 @@ export function connect(){
         })
 
 
-    }catch(error){
-        console.error(error);
+    }catch(error:any){
         console.log("something went wrong!");
-
+        console.log(error.message);
     }
 }

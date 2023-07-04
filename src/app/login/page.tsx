@@ -1,9 +1,9 @@
 "use client"
 import React, {useState, useEffect, FormEvent} from 'react'
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import Link from 'next/link'
+import { publicReq } from '@/helpers/axios'
 
 const LoginPage = () => {
 
@@ -23,13 +23,15 @@ const LoginPage = () => {
 
 
 
-  function handleSubmit (e:FormEvent<HTMLFormElement>){
+  async function handleSubmit (e:FormEvent<HTMLFormElement>){
     e.preventDefault();
     try {
         setLoading(true);
+        const response = await publicReq.post("/users/login", user)
+        console.log("login successful", response.data)
         router.push("/profile")
-    } catch (error) {
-      console.log("Error", error);
+    }catch (error: any) {
+      console.log("error: ", error.message );
       
     }finally{
       setLoading(false);

@@ -3,20 +3,20 @@ import mongoose from "mongoose"
 const userSchema = new mongoose.Schema({
     name:{
         type: String,
-        required : [true, "Please enter your name"]
+        required : true
     },
     email:{
         type: String,
-        required: [true, "Please provide the email"],
+        required: true,
         unique: true
     },
     password:{
         type: String,
-        required: [true, "Please provide the password"]
+        required: true
     },
     cnfPassword:{
         type: String,
-        required: [true, "Please confirm your password"]
+        required: true
     },
     verificationToken: String,
     verificationTokenExpiry: String,
@@ -24,6 +24,6 @@ const userSchema = new mongoose.Schema({
     forgotPasswordTokenExpiry: String,
 })
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.models.users ||mongoose.model("users", userSchema);
 
 export default User;

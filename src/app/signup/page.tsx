@@ -1,5 +1,6 @@
 "use client"
 import React, {useState, useEffect, FormEvent} from 'react'
+// import { publicReq } from '@/helpers/axios'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
@@ -25,13 +26,18 @@ const signupPage = () => {
   
   
   
-    function handleSubmit (e:FormEvent<HTMLFormElement>){
+    async function handleSubmit (e:FormEvent<HTMLFormElement>){
       e.preventDefault();
       try {
           setLoading(true);
+    // console.log(process.env.NEXT_PUBLIC_SECRET_KEY)
+
+          // const response = await publicReq.post("/users/signup", user)
+          const response = await axios.post("api/users/signup", user)
+          console.log("signup successful", response.data)
           router.push("/login")
-      } catch (error) {
-        console.log("Error", error);
+      } catch (error: any) {
+        console.log("error: ", error.message );
         
       }finally{
         setLoading(false);
