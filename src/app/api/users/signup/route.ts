@@ -25,12 +25,12 @@ export async function POST(request: NextRequest)
 
         if(userExists)
         {
-            return NextResponse.json(`User with ${email} already exists!`);
+            return NextResponse.json(`User with ${email} already exists!`, {status: 409});
         }
 
         if(password!=cnfPassword)
         {
-            return NextResponse.json('passwords do not match')
+            return NextResponse.json('passwords do not match', {status: 401})
         }
         
         // hashing
@@ -57,12 +57,12 @@ export async function POST(request: NextRequest)
             message:"Registration successful!",
             success: true,
             loggedUser
-        })
+        }, {status: 200})
 
         return response
 
-    }catch(error){
-        console.log(error)
+    }catch(error:any){
+        console.log(error.message)
         return NextResponse.json("Internal Server Error", {status: 500})
     }
 }

@@ -29,7 +29,7 @@ export async function POST(request: NextRequest)
     console.log(userExists);
 
     // valid check
-    const isValidPassword = await bcryptjs.compare(userExists.password, password);
+    const isValidPassword = await bcryptjs.compare(password, userExists.password);
 
     if(!isValidPassword)
     {
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest)
     }
     console.log(userExists);
 
-    // token generation
+    // token generation``````````````
     const payload = {
         id: userExists._id,
         email: userExists.email

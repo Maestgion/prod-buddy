@@ -3,7 +3,7 @@ import React, {useState, useEffect, FormEvent} from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import Link from 'next/link'
-import { publicReq } from '@/helpers/axios'
+import axios from 'axios'
 
 const LoginPage = () => {
 
@@ -27,7 +27,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
         setLoading(true);
-        const response = await publicReq.post("/users/login", user)
+        const response = await axios.post("/api/users/login", user)
         console.log("login successful", response.data)
         router.push("/profile")
     }catch (error: any) {

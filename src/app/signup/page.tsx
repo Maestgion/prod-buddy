@@ -1,6 +1,5 @@
 "use client"
 import React, {useState, useEffect, FormEvent} from 'react'
-// import { publicReq } from '@/helpers/axios'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
@@ -15,7 +14,7 @@ const signupPage = () => {
         name: "",
         email: "",
         password: "",
-        confirmPassword:"",
+        cnfPassword:"",
       });
     
     // loading state
@@ -30,15 +29,20 @@ const signupPage = () => {
       e.preventDefault();
       try {
           setLoading(true);
-    // console.log(process.env.NEXT_PUBLIC_SECRET_KEY)
-
-          // const response = await publicReq.post("/users/signup", user)
           const response = await axios.post("api/users/signup", user)
-          console.log("signup successful", response.data)
+          console.log(response.data)
           router.push("/login")
       } catch (error: any) {
-        console.log("error: ", error.message );
-        
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 409) {
+            window.alert("User already exists");
+          } else {
+            window.alert("Something went wrong");
+          }
+        } else {
+          console.log("error!: ", error.message);
+          window.alert("Something went wrong");
+        }
       }finally{
         setLoading(false);
   
@@ -80,7 +84,7 @@ const signupPage = () => {
             <hr className='border-b-1 border-zinc-800 mx-2'/>
               <input type="password" className='text-zinc-400   outline-none bg-transparent py-4 px-6' placeholder="Password" value={user.password} onChange={(e)=>setUser({...user, password: e.target.value})} />
             <hr className='border-b-1 border-zinc-800 mx-2'/>
-              <input type="password" className='text-zinc-400   outline-none bg-transparent py-4 px-6' placeholder="Confirm Password" value={user.confirmPassword} onChange={(e)=>setUser({...user, confirmPassword: e.target.value})} />
+              <input type="password" className='text-zinc-400   outline-none bg-transparent py-4 px-6' placeholder="Confirm Password" value={user.cnfPassword} onChange={(e)=>setUser({...user, cnfPassword: e.target.value})} />
               </div>
     
     
@@ -94,8 +98,16 @@ const signupPage = () => {
               <Link href="/login" className='text-orange-400 '>Log In</Link>
             </div>
              </form>
-    
-    
+
+            {
+            
+             (user.cnfPassword.length>=user.password.length && user.password !=user.cnfPassword) && (
+                <>
+                <h6 className='text-red-500'>Password didn't matched</h6><br/>
+                </>
+              )
+            }
+      
           </div>
         </>
       )
